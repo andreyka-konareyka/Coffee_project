@@ -17,23 +17,21 @@ from kivy.uix.screenmanager import Screen
 from kivy.factory import Factory
 from kivy.core.window import Window
 
-
-class TestScreen(Screen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.name = 'test_screen'
-        layout = AnchorLayout(anchor_x='center', anchor_y='center')
-        layout.add_widget(Button(text="Test button", size_hint=[0.8, 0.2]))
-
-        self.add_widget(layout)
+import loginscreen
 
 
+# Класс приложения
 class CoffeeApp(App):
     def build(self):
+        # Создаём менеджере экранов
         sm = ScreenManager()
-        sm.add_widget(TestScreen())
+        # Добавляем экраны
+        sm.add_widget(loginscreen.LoginScreen())
         return sm
 
 
 if __name__ == '__main__':
+    # Установим цвет заднего фона для приложения
+    Window.clearcolor = (248 / 255, 215 / 255, 191 / 255, 1)
+    # И запустим
     CoffeeApp().run()
