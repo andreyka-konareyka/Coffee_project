@@ -13,6 +13,7 @@ from kivy.factory import Factory
 # from kivy.core.window import Window
 
 from global_settings import *
+import Backend.backend as backend
 
 
 # Виджет входа
@@ -31,7 +32,7 @@ class LoginWidget(AnchorLayout):
         self.password_input = TextInput(multiline=False, size_hint=(1, 0.7))
         box_buttons = BoxLayout(size_hint=(1, 0.7))
         self.button_sign_in = Button(text="Войти", size_hint=(.65, 1))
-        self.button_register = Button(text="Регистрация", size_hint=(.35, 1))
+        self.button_registration = Button(text="Регистрация", size_hint=(.35, 1))
 
         '''
             Текст об ошибке при входе.
@@ -41,7 +42,7 @@ class LoginWidget(AnchorLayout):
 
         """ Добавляем виджеты в форму """
         box_buttons.add_widget(self.button_sign_in)
-        box_buttons.add_widget(self.button_register)
+        box_buttons.add_widget(self.button_registration)
 
         form_sign_in.add_widget(self.label_sign_in)
         form_sign_in.add_widget(label_enter_number)
@@ -56,8 +57,8 @@ class LoginWidget(AnchorLayout):
     def bind_callback_sign_in(self, func):
         self.button_sign_in.bind(on_press=func)
 
-    def bind_callback_registry(self, func):
-        self.button_register.bind(on_press=func)
+    def bind_callback_registration(self, func):
+        self.button_registration.bind(on_press=func)
 
 
 # Экран входа в учётныю запись
@@ -69,13 +70,31 @@ class LoginScreen(Screen):
         self.login_form = LoginWidget(anchor_x="center", anchor_y="center")
         # Прикрепим к её кнопкам наши функции
         self.login_form.bind_callback_sign_in(self.callback_sign_in)
-        self.login_form.bind_callback_registry(self.callback_registry)
+        self.login_form.bind_callback_registration(self.callback_registration)
 
         # Добавим на экран
         self.add_widget(self.login_form)
 
     def callback_sign_in(self, instance):
-        print('Sign in')
+        login = self.login_form.login_input.text
+        password = self.login_form.password_input.text
 
-    def callback_registry(self, instance):
-        print('Registry')
+        if len(login) > 0:
+            if login[0] == '8':
+                login = '+7' + login[1:]
+            elif login[0] == '7':
+                login = '+' + login
+
+        log = backend.LoginUser(login, password)
+        if log is True:
+            cookies_file = open('cookies', 'w')
+            cookies_file.write(login)
+            cookies_file.close()
+            self.manager.transition.direction = 'left'
+            self.manager.current = "menu_screen"
+        else:
+            self.login_form.label_password_invalid.text = "Неверный логин или пароль"
+
+    def callback_registration(self, instance):
+        self.manager.transition.direction = 'left'
+        self.manager.current = "registration_screen"
