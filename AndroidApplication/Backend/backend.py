@@ -12,3 +12,7 @@ def RegistrationUser(login, password):
     # Пока будем использовать json
     # Потом подключим БД и будем с ней работать через API
     return l_backend.registration_with_json(login, password)
+
+
+def GetListProducts():
+    return l_backend.get_list_products_from_json()

@@ -25,6 +25,9 @@ import login_screen
 import registration_screen
 import menu_screen
 
+from global_settings import *
+import Backend.backend as backend
+
 
 # Класс приложения
 class CoffeeApp(App):
@@ -35,6 +38,13 @@ class CoffeeApp(App):
         sm.add_widget(login_screen.LoginScreen())
         sm.add_widget(registration_screen.RegistrationScreen())
         sm.add_widget(menu_screen.MenuScreen())
+
+        try:
+            cookies_file = open('cookies', 'r')
+            sm.current = 'menu_screen'
+        except Exception:
+            pass
+
         return sm
 
 

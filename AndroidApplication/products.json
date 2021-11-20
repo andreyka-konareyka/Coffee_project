@@ -1,0 +1,22 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Латте",
+      "description": "",
+      "image": "latte.png"
+    },
+    {
+      "id": 2,
+      "title": "Капучино",
+      "description": "",
+      "image": "latte.png"
+    },
+    {
+      "id": 3,
+      "title": "Американо",
+      "description": "",
+      "image": "latte.png"
+    }
+  ]
+}

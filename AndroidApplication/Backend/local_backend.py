@@ -46,3 +46,13 @@ def registration_with_json(login, password):
         json.dump(data, json_file, indent=2)
 
     return True
+
+
+def get_list_products_from_json():
+    json_str = ''
+    with open('products.json', 'r') as file:
+        for line in file:
+            json_str += line
+
+    data = json.loads(json_str)
+    return data["products"]
