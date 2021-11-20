@@ -1,5 +1,8 @@
 from kivy.app import App
 from kivy.config import Config
+
+import registryscreen
+
 Config.set("graphics", "width", 640)    # Установка разрешения, похожего не телефон
 Config.set("graphics", "height", 960)   # Нужно для отладки на ПК
 
@@ -18,6 +21,7 @@ from kivy.factory import Factory
 from kivy.core.window import Window
 
 import loginscreen
+import registryscreen
 
 
 # Класс приложения
@@ -26,7 +30,8 @@ class CoffeeApp(App):
         # Создаём менеджере экранов
         sm = ScreenManager()
         # Добавляем экраны
-        sm.add_widget(loginscreen.LoginScreen())
+        # sm.add_widget(loginscreen.LoginScreen())
+        sm.add_widget(registryscreen.RegistryScreen())
         return sm
 
 

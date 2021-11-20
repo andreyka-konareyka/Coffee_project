@@ -10,7 +10,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.screenmanager import Screen
 from kivy.factory import Factory
-from kivy.core.window import Window
+# from kivy.core.window import Window
 
 from global_settings import *
 
