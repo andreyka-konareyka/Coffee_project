@@ -19,7 +19,11 @@ import Backend.backend as backend
 class UpperCurtainWidget(AnchorLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.add_widget(Button(text='Назад', size_hint_y=0.05))
+        self.button_BACK = Button(text='Назад', size_hint_y=0.05)
+        self.add_widget(self.button_BACK)
+
+    def bind_callback_BACK(self, func):
+        self.button_BACK.bind(on_press=func)
 
 
 class RegistrationWidget(AnchorLayout):
@@ -51,10 +55,52 @@ class RegistrationWidget(AnchorLayout):
 
         self.add_widget(form_registration)
 
+    def bind_callback_registration(self, func):
+        self.button_registration.bind(on_press=func)
+
 
 class RegistrationScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = 'registration_screen'
-        self.add_widget(UpperCurtainWidget(anchor_x='center', anchor_y='top'))
-        self.add_widget(RegistrationWidget(anchor_x="center", anchor_y="center"))
+
+        # Добавим верхнюю шторку
+        self.UpperCurtain = UpperCurtainWidget(anchor_x='center', anchor_y='top')
+        self.UpperCurtain.bind_callback_BACK(self.callback_BACK)
+        self.add_widget(self.UpperCurtain)
+
+        # И поле для регистрации
+        self.registration_form = RegistrationWidget(anchor_x="center", anchor_y="center")
+        self.registration_form.bind_callback_registration(self.callback_registration)
+        self.add_widget(self.registration_form)
+
+    def callback_BACK(self, instance):
+        self.manager.transition.direction = 'right'
+        self.manager.current = "login_screen"
+
+    def callback_registration(self, instance):
+        if self.registration_form.password_input1.text != self.registration_form.password_input2.text:
+            self.registration_form.label_error.text = "Пароли не совпадают"
+        elif self.registration_form.password_input1.text == '':
+            self.registration_form.label_error.text = "Пароль не введён"
+        else:
+            number = self.registration_form.login_input.text
+            password = self.registration_form.password_input1.text
+            if 11 <= len(number) <= 12:
+
+                # Попытка форматировать номер к виду +7...
+                if len(number) > 0:
+                    if number[0] == '8':
+                        number = '+7' + number[1:]
+                    elif number[0] == '7':
+                        number = '+' + number
+
+                log = backend.RegistrationUser(number, password)
+                if log is True:
+                    self.registration_form.label_error.text = ''
+                    self.manager.transition.direction = 'right'
+                    self.manager.current = "login_screen"
+                else:
+                    self.registration_form.label_error.text = "Пользователь с таким номером\nуже существует"
+            else:
+                self.registration_form.label_error.text = "Номер введён неправильно"

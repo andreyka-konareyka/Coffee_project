@@ -79,14 +79,17 @@ class LoginScreen(Screen):
         login = self.login_form.login_input.text
         password = self.login_form.password_input.text
 
+        # Попытка форматировать номер к виду +7...
         if len(login) > 0:
             if login[0] == '8':
                 login = '+7' + login[1:]
             elif login[0] == '7':
                 login = '+' + login
 
+        # Попробуем авторизоваться и запишем ответ в лог
         log = backend.LoginUser(login, password)
         if log is True:
+            # Если авторизация прошла успешно, то добавим файлы куки, чтобы потом повторно не входить.
             cookies_file = open('cookies', 'w')
             cookies_file.write(login)
             cookies_file.close()
