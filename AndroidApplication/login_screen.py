@@ -12,7 +12,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.factory import Factory
 # from kivy.core.window import Window
 
-from global_settings import *
+import global_settings
 import Backend.backend as backend
 
 
@@ -21,24 +21,47 @@ class LoginWidget(AnchorLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        form_sign_in = BoxLayout(orientation="vertical", size_hint=(.8, .4), spacing=3)
+        form_sign_in = BoxLayout(orientation="vertical",
+                                 size_hint=(.8, .4),
+                                 spacing=3)
 
-        self.label_sign_in = Label(text="Вход", color=Coffee_Colors[0], font_size=FontSize, size_hint=(1, 0.7))
-        label_enter_number = Label(text="Номер:", color=Coffee_Colors[0], size_hint=(1, 0.3))
+        self.label_sign_in = Label(text="Вход",
+                                   color=global_settings.Coffee_Colors[0],
+                                   font_size=global_settings.FontSizes[3],
+                                   size_hint=(1, 0.7))
+
+        label_enter_number = Label(text="Номер:",
+                                   color=global_settings.Coffee_Colors[0],
+                                   size_hint=(1, 0.3))
         ''' Ввод номера телефона '''
-        self.login_input = TextInput(multiline=False, size_hint=(1, 0.7))
-        label_enter_password = Label(text="Пароль:", color=Coffee_Colors[0], size_hint=(1, 0.3))
+        self.login_input = TextInput(multiline=False,
+                                     size_hint=(1, 0.7))
+
+        label_enter_password = Label(text="Пароль:",
+                                     color=global_settings.Coffee_Colors[0],
+                                     size_hint=(1, 0.3))
         ''' Ввод пароля '''
-        self.password_input = TextInput(multiline=False, size_hint=(1, 0.7))
+        self.password_input = TextInput(multiline=False,
+                                        size_hint=(1, 0.7))
+
         box_buttons = BoxLayout(size_hint=(1, 0.7))
-        self.button_sign_in = Button(text="Войти", size_hint=(.65, 1))
-        self.button_registration = Button(text="Регистрация", size_hint=(.35, 1))
+
+        self.button_sign_in = Button(text="Войти",
+                                     size_hint=(.65, 1),
+                                     font_size=global_settings.FontSizes[1])
+
+        self.button_registration = Button(text="Регистрация",
+                                          size_hint=(.35, 1),
+                                          font_size=global_settings.FontSizes[1])
 
         '''
             Текст об ошибке при входе.
             Изначально пустой текст.
         '''
-        self.label_password_invalid = Label(text="", color=(1, 0, 0, 1), font_size=FontSize, size_hint=(1, 0.7))
+        self.label_password_invalid = Label(text="",
+                                            color=(1, 0, 0, 1),
+                                            font_size=global_settings.FontSizes[1],
+                                            size_hint=(1, 0.7))
 
         """ Добавляем виджеты в форму """
         box_buttons.add_widget(self.button_sign_in)
@@ -93,11 +116,19 @@ class LoginScreen(Screen):
             cookies_file = open('cookies', 'w')
             cookies_file.write(login)
             cookies_file.close()
+            
+            self.reset_screen()
             self.manager.transition.direction = 'left'
             self.manager.current = "menu_screen"
         else:
             self.login_form.label_password_invalid.text = "Неверный логин или пароль"
 
     def callback_registration(self, instance):
+        self.reset_screen()
         self.manager.transition.direction = 'left'
         self.manager.current = "registration_screen"
+
+    def reset_screen(self):
+        self.login_form.login_input.text = ''
+        self.login_form.password_input.text = ''
+        self.login_form.label_password_invalid.text = ''

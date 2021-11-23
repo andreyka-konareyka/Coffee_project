@@ -12,7 +12,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.factory import Factory
 # from kivy.core.window import Window
 
-from global_settings import *
+import global_settings
 import Backend.backend as backend
 
 
@@ -30,18 +30,45 @@ class RegistrationWidget(AnchorLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        form_registration = BoxLayout(orientation="vertical", size_hint=(.8, .4), spacing=3)
+        form_registration = BoxLayout(orientation="vertical",
+                                      size_hint=(.8, .4),
+                                      spacing=3)
 
-        self.label_registration = Label(text="Регистрация", color=Coffee_Colors[0], font_size=FontSize, size_hint=(1, 0.7))
-        label_enter_number = Label(text="Введите номер:", color=Coffee_Colors[0], size_hint=(1, 0.3))
-        self.login_input = TextInput(multiline=False, size_hint=(1, 0.7))
-        label_enter_password1 = Label(text="Введите пароль:", color=Coffee_Colors[0], size_hint=(1, 0.3))
-        self.password_input1 = TextInput(multiline=False, size_hint=(1, 0.7))
-        label_enter_password2 = Label(text="Повторите пароль:", color=Coffee_Colors[0], size_hint=(1, 0.3))
-        self.password_input2 = TextInput(multiline=False, size_hint=(1, 0.7))
-        self.button_registration = Button(text="Регистрация", size_hint=(1, 0.7))
+        self.label_registration = Label(text="Регистрация",
+                                        color=global_settings.Coffee_Colors[0],
+                                        font_size=global_settings.FontSizes[3],
+                                        size_hint=(1, 0.7))
+
+        label_enter_number = Label(text="Введите номер:",
+                                   color=global_settings.Coffee_Colors[0],
+                                   size_hint=(1, 0.3))
+
+        self.login_input = TextInput(multiline=False,
+                                     size_hint=(1, 0.7))
+
+        label_enter_password1 = Label(text="Введите пароль:",
+                                      color=global_settings.Coffee_Colors[0],
+                                      size_hint=(1, 0.3))
+
+        self.password_input1 = TextInput(multiline=False,
+                                         size_hint=(1, 0.7))
+
+        label_enter_password2 = Label(text="Повторите пароль:",
+                                      color=global_settings.Coffee_Colors[0],
+                                      size_hint=(1, 0.3))
+
+        self.password_input2 = TextInput(multiline=False,
+                                         size_hint=(1, 0.7))
+
+        self.button_registration = Button(text="Регистрация",
+                                          font_size=global_settings.FontSizes[1],
+                                          size_hint=(1, 0.7))
+
         # self.button_register.bind(on_press=self.reflex_button_register_press)
-        self.label_error = Label(text="", color=(1, 0, 0, 1), font_size=FontSize, size_hint=(1, 0.7))
+        self.label_error = Label(text="",
+                                 color=(1, 0, 0, 1),
+                                 font_size=global_settings.FontSizes[1],
+                                 size_hint=(1, 0.7))
 
         form_registration.add_widget(self.label_registration)
         form_registration.add_widget(label_enter_number)
@@ -75,6 +102,7 @@ class RegistrationScreen(Screen):
         self.add_widget(self.registration_form)
 
     def callback_BACK(self, instance):
+        self.reset_screen()
         self.manager.transition.direction = 'right'
         self.manager.current = "login_screen"
 
@@ -97,10 +125,17 @@ class RegistrationScreen(Screen):
 
                 log = backend.RegistrationUser(number, password)
                 if log is True:
-                    self.registration_form.label_error.text = ''
+                    self.reset_screen()
+                    # self.registration_form.label_error.text = ''
                     self.manager.transition.direction = 'right'
                     self.manager.current = "login_screen"
                 else:
                     self.registration_form.label_error.text = "Пользователь с таким номером\nуже существует"
             else:
                 self.registration_form.label_error.text = "Номер введён неправильно"
+
+    def reset_screen(self):
+        self.registration_form.login_input.text = ''
+        self.registration_form.password_input1.text = ''
+        self.registration_form.password_input2.text = ''
+        self.registration_form.label_error.text = ''
