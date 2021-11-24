@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.urls import reverse
 
 #***************
 # Category / категория
@@ -14,6 +15,11 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 User = get_user_model()
+
+
+def get_product_url(obj, viewname):
+    ct_model = obj.__class__.meta.model_name
+    return reverse(viewname, kwargs={'ct_model': ct_model, 'slug': obj.slug})
 
 
 class LatestProductManager:
@@ -72,6 +78,9 @@ class HotDrinks(Product):
     def __str__(self):
         return "{} : {}".format(self.category.name, self.title)
 
+    def get_absolute_url(self):
+        return get_product_url(self, 'product_detail')
+
 
 class ColdDrinks(Product):
 
@@ -80,12 +89,19 @@ class ColdDrinks(Product):
     def __str__(self):
         return "{} : {}".format(self.category.name, self.title)
 
+    def get_absolute_url(self):
+        return get_product_url(self, 'product_detail')
+
 
 class Desserts(Product):
+
     weight = models.CharField(max_length=255, verbose_name='Вес')
 
     def __str__(self):
         return "{} : {}".format(self.category.name, self.title)
+
+    def get_absolute_url(self):
+        return get_product_url(self, 'product_detail')
 
 
 class CartProduct(models.Model):
