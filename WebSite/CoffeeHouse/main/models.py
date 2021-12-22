@@ -106,15 +106,15 @@ class Desserts(Product):
 
 class CartProduct(models.Model):
     user = models.ForeignKey('Customer', verbose_name='Покупатель', on_delete=models.CASCADE)
-    cart = models.ForeignKey('Cart', verbose_name='корзина', on_delete=models.CASCADE, related_name='related_product')
+    cart = models.ForeignKey('Cart', verbose_name='корзина', on_delete=models.CASCADE, related_name='related_products')
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE) #тут будет модель продукта
     object_id = models.PositiveIntegerField() #тут будет кол-во
     content_object = GenericForeignKey('content_type', 'object_id')
-    count = models.PositiveIntegerField(default=1)
+    count = models.PositiveIntegerField(default=1) ###qty
     final_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Цена')
 
     def __str__(self):
-        return 'Продукт: {} (для корзины)'.format(self.product.title)
+        return 'Продукт: {} (для корзины)'.format(self.content_object.title)
 
 
 class Cart(models.Model):
@@ -123,6 +123,8 @@ class Cart(models.Model):
     products = models.ManyToManyField(CartProduct, blank=True, related_name='related_cart')
     total_product = models.PositiveIntegerField(default=0)
     final_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Цена')
+    in_order = models.BooleanField(default=False)
+    for_anonymous_user = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id)
