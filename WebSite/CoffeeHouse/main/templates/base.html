@@ -36,8 +36,9 @@
                     <form class="d-flex">
                         <button class="btn btn-outline-dark" type="submit">
                             <i class="bi-cart-fill me-1"></i>
-                            Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                            <a class="nav-link" href="{% url 'cart' %}"></a>
+                            Корзина
+                            <span class="badge bg-dark text-white ms-1 rounded-pill">{{ cart.products.count }}</span>
                         </button>
                     </form>
                 </div>
@@ -69,6 +70,7 @@
                                     <h5 class="fw-bolder">{{ product.title }}</h5>
                                     <!-- Product price-->
                                     {{ product.price }}
+
                                 </div>
                             </div>
                             <!-- Product actions-->
