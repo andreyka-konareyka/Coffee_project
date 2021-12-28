@@ -140,6 +140,12 @@ class CartScreen(Screen):
 
         self.scroll_panel.add_widget(self.cart_items)
 
+        self.pay_button = Button(text="Оформить заказ",
+                                 font_size=global_settings.FontSizes[1],
+                                 size_hint_y=size_bottom_panel_height,
+                                 background_color=(.9, .25, .15, 1),
+                                 background_normal='')
+        self.pay_button.bind(on_press=self.callback_pay)
 
         self.bottom_panel = BottomPanel('cart', size_hint_y=size_bottom_panel_height, spacing=5)
         self.bottom_panel.bind_callback_menu(self.callback_menu)
@@ -147,9 +153,14 @@ class CartScreen(Screen):
         self.bottom_panel.bind_callback_account(self.callback_account)
 
         self.master_box.add_widget(self.scroll_panel)
+        self.master_box.add_widget(self.pay_button)
         self.master_box.add_widget(self.bottom_panel)
 
         self.add_widget(self.master_box)
+
+    def callback_pay(self, instance):
+        self.manager.transition.direction = 'left'
+        self.manager.current = "pay_screen"
 
     def callback_menu(self, instance):
         self.manager.transition.direction = 'right'

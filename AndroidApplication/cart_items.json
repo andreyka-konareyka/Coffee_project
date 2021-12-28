@@ -6,7 +6,7 @@
       "price": 120,
       "description": "",
       "image": "latte.png",
-      "count": 5
+      "count": 3
     },
     {
       "id": 2,
@@ -14,7 +14,15 @@
       "price": 100,
       "description": "",
       "image": "latte.png",
-      "count": 3
+      "count": 1
+    },
+    {
+      "id": 3,
+      "title": "\u0410\u043c\u0435\u0440\u0438\u043a\u0430\u043d\u043e",
+      "price": 80,
+      "description": "",
+      "image": "latte.png",
+      "count": 2
     }
   ]
 }

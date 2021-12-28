@@ -1,5 +1,6 @@
 import json
 import hashlib
+import random
 
 import global_settings
 
@@ -101,3 +102,10 @@ def remove_from_cart_items_in_json(dict):
     data = {"cart_items": current_items}
     with open('cart_items.json', 'w', encoding='utf-8') as json_file:
         json.dump(data, json_file, indent=2)
+
+
+def send_order():
+    n = random.randint(1, 99)
+    char_lst = ['A', 'B', 'C', 'D', 'W', 'Y', 'R', 'F', 'Z']
+    random.shuffle(char_lst)
+    return char_lst[0] + str(n)

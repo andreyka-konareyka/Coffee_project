@@ -27,6 +27,7 @@ import menu_screen
 import account_screen
 import sales_screen
 import cart_screen
+import pay_screen
 
 import global_settings
 import Backend.backend as backend
@@ -43,6 +44,7 @@ class CoffeeApp(App):
         self.sm.add_widget(registration_screen.RegistrationScreen())
         self.sm.add_widget(menu_screen.MenuScreen())
         self.sm.add_widget(sales_screen.SalesScreen())
+        self.sm.add_widget(pay_screen.PayScreen())
 
         self.cart_Screen = cart_screen.CartScreen()
         self.sm.add_widget(self.cart_Screen)

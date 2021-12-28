@@ -16,3 +16,7 @@ def RegistrationUser(login, password):
 
 def GetListProducts():
     return l_backend.get_list_products_from_json()
+
+
+def SendOrder():
+    return l_backend.send_order()
