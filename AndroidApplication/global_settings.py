@@ -1,5 +1,11 @@
+import Backend.local_backend as lBackEnd
+
+
 def Init():
-    global DebugMod, FontSizes, Coffee_Colors, CurrentUser
+    global DebugMod, FontSizes, Coffee_Colors, CurrentUser, Second_Theme_Colors, Global_Theme_Colors, MenuProducts, Products_in_Cart
+    global funcs_upd_cart
+
+    funcs_upd_cart = []
 
     DebugMod = True
 
@@ -31,6 +37,32 @@ def Init():
                      (82 / 255, 55 / 255, 39 / 255, 1),
                      (61 / 255, 43 / 255, 37 / 255, 1)]
 
+    Second_Theme_Colors = [(81 / 255, 56 / 255, 42 / 255, 1),
+
+                           (0, 0, 0, 1),
+                           (0, 0, 0, 1),
+                           (0, 0, 0, 1),
+                           (0, 0, 0, 1),
+
+                           (0, 0, 0, 1),
+                           (0, 0, 0, 1),
+                           (0, 0, 0, 1),
+                           (0, 0, 0, 1),
+
+                           (1, 1, 1, 1),
+                           (1, 1, 1, 1),
+                           (1, 1, 1, 1),
+                           (1, 1, 1, 1),
+
+                           (1, 1, 1, 1),
+                           (1, 1, 1, 1),
+                           (1, 1, 1, 1),
+                           (1, 1, 1, 1)]
+
+    Global_Theme_Colors = Coffee_Colors
+    MenuProducts = []
+    Products_in_Cart = []
+
 
 def SetDebugMode(new_mode):
     global DebugMod
@@ -50,3 +82,24 @@ def SetColors(new_colors):
 def SetCurrentUser(user_number):
     global CurrentUser
     CurrentUser = user_number
+
+
+def get_product_from_cart(id):
+    for p in Products_in_Cart:
+        if p["id"] == id:
+            return p
+    return None
+
+
+def get_product_from_menu(id):
+    for p in MenuProducts:
+        if p["id"] == id:
+            return p
+    return None
+
+
+def update_cart_counters():
+    global Products_in_Cart
+    Products_in_Cart = lBackEnd.get_cart_items_from_json()
+    for func in funcs_upd_cart:
+        func()

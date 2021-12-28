@@ -35,26 +35,26 @@ class RegistrationWidget(AnchorLayout):
                                       spacing=3)
 
         self.label_registration = Label(text="Регистрация",
-                                        color=global_settings.Coffee_Colors[0],
+                                        color=global_settings.Global_Theme_Colors[0],
                                         font_size=global_settings.FontSizes[3],
                                         size_hint=(1, 0.7))
 
         label_enter_number = Label(text="Введите номер:",
-                                   color=global_settings.Coffee_Colors[0],
+                                   color=global_settings.Global_Theme_Colors[0],
                                    size_hint=(1, 0.3))
 
         self.login_input = TextInput(multiline=False,
                                      size_hint=(1, 0.7))
 
         label_enter_password1 = Label(text="Введите пароль:",
-                                      color=global_settings.Coffee_Colors[0],
+                                      color=global_settings.Global_Theme_Colors[0],
                                       size_hint=(1, 0.3))
 
         self.password_input1 = TextInput(multiline=False,
                                          size_hint=(1, 0.7))
 
         label_enter_password2 = Label(text="Повторите пароль:",
-                                      color=global_settings.Coffee_Colors[0],
+                                      color=global_settings.Global_Theme_Colors[0],
                                       size_hint=(1, 0.3))
 
         self.password_input2 = TextInput(multiline=False,

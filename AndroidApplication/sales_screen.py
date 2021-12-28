@@ -30,11 +30,11 @@ class SalesScreen(Screen):
 
         box.add_widget(Label(text='Акции',
                              font_size=global_settings.FontSizes[3],
-                             color=global_settings.Coffee_Colors[10]))
+                             color=global_settings.Global_Theme_Colors[10]))
 
         box.add_widget(Label(text='пока недоступны',
                              font_size=global_settings.FontSizes[2],
-                             color=global_settings.Coffee_Colors[7]))
+                             color=global_settings.Global_Theme_Colors[7]))
         anchor.add_widget(box)
 
         self.bottom_panel = BottomPanel('sales', size_hint_y=size_bottom_panel_height, spacing=5)

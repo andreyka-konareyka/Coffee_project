@@ -1,0 +1,20 @@
+{
+  "cart_items": [
+    {
+      "id": 1,
+      "title": "\u041b\u0430\u0442\u0442\u0435",
+      "price": 120,
+      "description": "",
+      "image": "latte.png",
+      "count": 5
+    },
+    {
+      "id": 2,
+      "title": "\u041a\u0430\u043f\u0443\u0447\u0438\u043d\u043e",
+      "price": 100,
+      "description": "",
+      "image": "latte.png",
+      "count": 3
+    }
+  ]
+}

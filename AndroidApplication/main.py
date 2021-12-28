@@ -1,11 +1,8 @@
 import os
 
+import kivy.uix.screenmanager
 from kivy.app import App
 from kivy.config import Config
-
-import global_settings
-import menu_screen
-import registration_screen
 
 Config.set("graphics", "width", 640)    # Установка разрешения, похожего не телефон
 Config.set("graphics", "height", 960)   # Нужно для отладки на ПК
@@ -33,25 +30,43 @@ import cart_screen
 
 import global_settings
 import Backend.backend as backend
+import Backend.local_backend as lBackEnd
 
 
 # Класс приложения
 class CoffeeApp(App):
     def build(self):
         # Создаём менеджере экранов
-        sm = ScreenManager()
+        self.sm = ScreenManager()
         # Добавляем экраны
-        sm.add_widget(login_screen.LoginScreen())
-        sm.add_widget(registration_screen.RegistrationScreen())
-        sm.add_widget(menu_screen.MenuScreen())
-        sm.add_widget(sales_screen.SalesScreen())
-        sm.add_widget(cart_screen.CartScreen())
-        sm.add_widget(account_screen.AccountScreen())
+        self.sm.add_widget(login_screen.LoginScreen())
+        self.sm.add_widget(registration_screen.RegistrationScreen())
+        self.sm.add_widget(menu_screen.MenuScreen())
+        self.sm.add_widget(sales_screen.SalesScreen())
+
+        self.cart_Screen = cart_screen.CartScreen()
+        self.sm.add_widget(self.cart_Screen)
+
+        global_settings.funcs_upd_cart.append(self.update_cart_Screen)
+
+        self.sm.add_widget(account_screen.AccountScreen())
 
         if os.path.exists('cookies'):
-            sm.current = 'menu_screen'
+            self.sm.current = 'menu_screen'
 
-        return sm
+        return self.sm
+
+    def update_cart_Screen(self):
+        flag_in_cart = True if self.sm.current == 'cart_screen' else False
+
+        self.sm.remove_widget(self.cart_Screen)
+        self.cart_Screen = cart_screen.CartScreen()
+        self.sm.add_widget(self.cart_Screen)
+
+        if flag_in_cart:
+            self.sm.transition = kivy.uix.screenmanager.NoTransition()
+            self.sm.current = 'cart_screen'
+            self.sm.transition = kivy.uix.screenmanager.SlideTransition()
 
 
 if __name__ == '__main__':
@@ -65,11 +80,13 @@ if __name__ == '__main__':
     new_font_sizes = [normal_font_size * font_scale for font_scale in font_scales]
     global_settings.Init()
     global_settings.SetFontSizes(new_font_sizes)
+    global_settings.Products_in_Cart = lBackEnd.get_cart_items_from_json()
 
     # ========================================== #
     # Установим цвет заднего фона для приложения #
     # Создадим окно приложения и запустим его.   #
     # ========================================== #
 
-    Window.clearcolor = (248 / 255, 215 / 255, 191 / 255, 1)
+    # Window.clearcolor = (248 / 255, 215 / 255, 191 / 255, 1)
+    Window.clearcolor = (1, 1, 1, 1)
     CoffeeApp().run()

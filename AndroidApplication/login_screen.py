@@ -26,19 +26,19 @@ class LoginWidget(AnchorLayout):
                                  spacing=3)
 
         self.label_sign_in = Label(text="Вход",
-                                   color=global_settings.Coffee_Colors[0],
+                                   color=global_settings.Global_Theme_Colors[0],
                                    font_size=global_settings.FontSizes[3],
                                    size_hint=(1, 0.7))
 
         label_enter_number = Label(text="Номер:",
-                                   color=global_settings.Coffee_Colors[0],
+                                   color=global_settings.Global_Theme_Colors[0],
                                    size_hint=(1, 0.3))
         ''' Ввод номера телефона '''
         self.login_input = TextInput(multiline=False,
                                      size_hint=(1, 0.7))
 
         label_enter_password = Label(text="Пароль:",
-                                     color=global_settings.Coffee_Colors[0],
+                                     color=global_settings.Global_Theme_Colors[0],
                                      size_hint=(1, 0.3))
         ''' Ввод пароля '''
         self.password_input = TextInput(multiline=False,
@@ -48,11 +48,11 @@ class LoginWidget(AnchorLayout):
 
         self.button_sign_in = Button(text="Войти",
                                      size_hint=(.65, 1),
-                                     font_size=global_settings.FontSizes[1])
+                                     font_size=global_settings.FontSizes[0])
 
         self.button_registration = Button(text="Регистрация",
                                           size_hint=(.35, 1),
-                                          font_size=global_settings.FontSizes[1])
+                                          font_size=global_settings.FontSizes[0])
 
         '''
             Текст об ошибке при входе.
@@ -116,7 +116,7 @@ class LoginScreen(Screen):
             cookies_file = open('cookies', 'w')
             cookies_file.write(login)
             cookies_file.close()
-            
+
             self.reset_screen()
             self.manager.transition.direction = 'left'
             self.manager.current = "menu_screen"
