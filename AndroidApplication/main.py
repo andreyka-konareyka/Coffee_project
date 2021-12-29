@@ -28,6 +28,7 @@ import account_screen
 import sales_screen
 import cart_screen
 import pay_screen
+import order_number_screen
 
 import global_settings
 import Backend.backend as backend
@@ -45,13 +46,14 @@ class CoffeeApp(App):
         self.sm.add_widget(menu_screen.MenuScreen())
         self.sm.add_widget(sales_screen.SalesScreen())
         self.sm.add_widget(pay_screen.PayScreen())
+        self.sm.add_widget(order_number_screen.OrderScreen())
+        self.sm.add_widget(account_screen.AccountScreen())
 
         self.cart_Screen = cart_screen.CartScreen()
         self.sm.add_widget(self.cart_Screen)
 
         global_settings.funcs_upd_cart.append(self.update_cart_Screen)
 
-        self.sm.add_widget(account_screen.AccountScreen())
 
         if os.path.exists('cookies'):
             self.sm.current = 'menu_screen'

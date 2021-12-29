@@ -38,28 +38,44 @@ class PayScreen(Screen):
         label_way_pay = Label(text="Выбирите способ оплаты:",
                               font_size=global_settings.FontSizes[2],
                               color=(0, 0, 0, 1))
-
+        #
+        # Первый чекбокс
+        #
         box_for_checkbox1 = BoxLayout(size_hint_x=0.5)
-        box_for_checkbox1.add_widget(CheckBox(group="way_pay",
-                                              active=True,
-                                              color=(0, 0, 0, 1)))
-        box_for_checkbox1.add_widget(Button(background_normal='images\\cash.png',
-                                            size_hint_x=0.6))
+        self.checkbox_cash = CheckBox(group="way_pay",
+                                      active=True,
+                                      color=(0, 0, 0, 1))
+        self.checkbox_cash.bind(on_press=self.callback_image_cash)
+        box_for_checkbox1.add_widget(self.checkbox_cash)
 
+        button_cash = Button(background_normal='images/cash.png',
+                             size_hint_x=0.6)
+        button_cash.bind(on_press=self.callback_image_cash)
+        box_for_checkbox1.add_widget(button_cash)
+
+        #
+        # Второй чекбокс
+        #
         box_for_checkbox2 = BoxLayout(size_hint_x=0.5)
-        box_for_checkbox2.add_widget(CheckBox(group="way_pay",
-                                              active=False,
-                                              color=(0, 0, 0, 1)))
-        box_for_checkbox2.add_widget(Button(background_normal='images\\cards.png',
-                                            size_hint_x=0.5))
+        self.checkbox_cards = CheckBox(group="way_pay",
+                                       active=False,
+                                       color=(0, 0, 0, 1))
+        self.checkbox_cards.bind(on_press=self.callback_image_cards)
+        box_for_checkbox2.add_widget(self.checkbox_cards)
+        button_cards = Button(background_normal='images/cards.png',
+                              size_hint_x=0.5)
+        button_cards.bind(on_press=self.callback_image_cards)
+        box_for_checkbox2.add_widget(button_cards)
 
-        self.error_label = Label(text="Оплата пока доступна только при получении",
+        self.error_label = Label(text="",
                                  color=(.9, .25, .15, 1))
 
         self.button_pay = Button(text='Оформить заказ',
                                  background_color=(.9, .25, .15, 1),
                                  background_normal='')
         self.button_pay.bind(on_press=self.callback_button_pay)
+
+        global_settings.funcs_upd_cart.append(self.update_price)
 
         box_in_center.add_widget(self.price_label)
         box_in_center.add_widget(label_way_pay)
@@ -74,9 +90,28 @@ class PayScreen(Screen):
         master_layout.add_widget(anchor_layout)
         self.add_widget(master_layout)
 
+    def update_price(self):
+        price = 0
+        for prod in global_settings.Products_in_Cart:
+            price += prod["price"] * prod["count"]
+        self.price_label.text = "К оплате: {0}".format(price)
+
+    def callback_image_cash(self, instance):
+        self.checkbox_cash.active = True
+        self.checkbox_cards.active = False
+        self.error_label.text = ''
+
+    def callback_image_cards(self, instance):
+        self.checkbox_cash.active = False
+        self.checkbox_cards.active = True
+        self.error_label.text = "Оплата по карте доступна пока только при получении"
+
     def callback_button_pay(self, instance):
         result = backend.SendOrder()
         if result:
-            print("Номер заказа {0}".format(result))
+            global_settings.set_order_number(result)
+            global_settings.update_order_number()
+            self.manager.transition.direction = 'left'
+            self.manager.current = "order_number_screen"
         else:
-            print("Произошла непредвиденная ошибка. Попробуйте позже.")
+            self.error_label.text = "Произошла непредвиденная ошибка. Попробуйте позже."

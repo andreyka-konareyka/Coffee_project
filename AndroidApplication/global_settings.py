@@ -2,10 +2,11 @@ import Backend.local_backend as lBackEnd
 
 
 def Init():
-    global DebugMod, FontSizes, Coffee_Colors, CurrentUser, Second_Theme_Colors, Global_Theme_Colors, MenuProducts, Products_in_Cart
-    global funcs_upd_cart
+    global DebugMod, FontSizes, Coffee_Colors, CurrentUser, Second_Theme_Colors, Global_Theme_Colors, MenuProducts, Products_in_Cart, OrderNumber
+    global funcs_upd_cart, funcs_upd_order_number
 
     funcs_upd_cart = []
+    funcs_upd_order_number = []
 
     DebugMod = True
 
@@ -62,6 +63,7 @@ def Init():
     Global_Theme_Colors = Coffee_Colors
     MenuProducts = []
     Products_in_Cart = []
+    OrderNumber = ''
 
 
 def SetDebugMode(new_mode):
@@ -103,3 +105,13 @@ def update_cart_counters():
     Products_in_Cart = lBackEnd.get_cart_items_from_json()
     for func in funcs_upd_cart:
         func()
+
+
+def update_order_number():
+    for func in funcs_upd_order_number:
+        func()
+
+
+def set_order_number(new_number):
+    global OrderNumber
+    OrderNumber = new_number
