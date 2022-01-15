@@ -1,6 +1,8 @@
 package pivo_project.cofee.domain;
 
 
+
+
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 

@@ -5,3 +5,4 @@ import pivo_project.cofee.domain.Desserts;
 
 public interface DessertsRepo extends JpaRepository<Desserts, Long> {
 }
+
