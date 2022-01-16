@@ -35,6 +35,18 @@ public class UserController {
         return userRepo.getById(id);
     }
 
+    @GetMapping(params = {"email", "password"})
+    public Boolean Login(@RequestParam("email") String email, @RequestParam("password") String password){
+
+        User user = userRepo.findByEmail(email);
+        if (password.equals(user.getPassword())){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     @PostMapping
     public User createUser(@RequestBody User user) {
 
