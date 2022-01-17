@@ -31,7 +31,6 @@ public class UserController {
     @JsonView(Views.FullMessage.class)
     @GetMapping(params = {"id"})
     public User getUserById(@RequestParam("id") Long id){
-
         return userRepo.getById(id);
     }
 

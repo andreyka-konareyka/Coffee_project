@@ -1,11 +1,10 @@
 package pivo_project.cofee.domain;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "ordr")
@@ -17,6 +16,15 @@ public class Order {
     private Long id;
     private Long userId;
     private String billId;
+    private String products;
+
+    public String getProducts() {
+        return products;
+    }
+
+    public void setProducts(String products) {
+        this.products = products;
+    }
 
     public Long getId() {
         return id;

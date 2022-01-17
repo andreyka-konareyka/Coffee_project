@@ -25,7 +25,7 @@ public class ProductController {
     @GetMapping
     @JsonView(Views.IdName.class)
     public List<Product> getAllProducts(){
-        System.out.println(java.util.Arrays.asList(ProductType.values()));
+
         return productRepo.findAll();
     }
 
