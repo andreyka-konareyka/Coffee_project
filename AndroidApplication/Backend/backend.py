@@ -47,7 +47,6 @@ def GetListProducts():
     for product in raw_json_list:
         result.append(product)
         result[-1]['title'] = product['name']
-        result[-1]['image'] = "latte.png"
 
     return result
 
