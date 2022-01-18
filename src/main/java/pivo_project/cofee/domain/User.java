@@ -17,6 +17,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.Id.class)
     private Long id;
+    @JsonView(Views.Id.class)
+    private Long teleId;
     @JsonView(Views.IdName.class)
     private String number;
     @JsonView(Views.IdName.class)

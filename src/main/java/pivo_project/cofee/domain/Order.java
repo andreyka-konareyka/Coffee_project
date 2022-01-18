@@ -4,7 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @Entity
 @Table(name = "ordr")
@@ -17,6 +16,15 @@ public class Order {
     private Long userId;
     private String billId;
     private String products;
+    private Long booking;
+
+    public Long getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Long booking) {
+        this.booking = booking;
+    }
 
     public String getProducts() {
         return products;

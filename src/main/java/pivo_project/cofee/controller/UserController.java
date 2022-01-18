@@ -22,7 +22,7 @@ public class UserController {
 
 
     @GetMapping
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.FullMessage.class)
     public List<User> getAllUsers(){
 
         return userRepo.findAll();
@@ -34,10 +34,23 @@ public class UserController {
         return userRepo.getById(id);
     }
 
-    @GetMapping(params = {"email", "password"})
-    public Boolean Login(@RequestParam("email") String email, @RequestParam("password") String password){
+    @JsonView(Views.FullMessage.class)
+    @GetMapping(params = {"teleId"})
+    public User getUserByTeleId(@RequestParam("teleId") Long teleId){
+        return userRepo.findByTeleId(teleId);
+    }
 
-        User user = userRepo.findByEmail(email);
+    @JsonView(Views.FullMessage.class)
+    @GetMapping(params = {"number"})
+    public User getUserByNumber(@RequestParam("number") String number){
+        return userRepo.findByNumber(number);
+    }
+
+
+    @GetMapping(params = {"number", "password"})
+    public Boolean Login(@RequestParam("number") String number, @RequestParam("password") String password){
+
+        User user = userRepo.findByNumber(number);
         if (password.equals(user.getPassword())){
             return true;
         }

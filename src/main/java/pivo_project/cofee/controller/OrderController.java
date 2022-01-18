@@ -1,11 +1,9 @@
 package pivo_project.cofee.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pivo_project.cofee.domain.Order;
-import pivo_project.cofee.domain.Views;
 import pivo_project.cofee.repo.OrderRepo;
 
 import java.util.List;
@@ -31,6 +29,12 @@ public class OrderController {
     public Order getOrderById(@RequestParam("id") Long id){
 
         return orderRepo.getById(id);
+    }
+
+    @GetMapping(params = {"billId"})
+    public Order getOrderByBillId(@RequestParam("billId") String billId){
+
+        return orderRepo.findByBillId(billId);
     }
 
     @GetMapping(params = {"userId"})

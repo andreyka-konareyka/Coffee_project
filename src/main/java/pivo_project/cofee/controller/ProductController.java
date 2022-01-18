@@ -30,7 +30,7 @@ public class ProductController {
     }
 
     @GetMapping(params = {"type"})
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.FullMessage.class)
     List<Product> getProductsByType(@RequestParam("type") ProductType type){
         return productRepo.findByType(type);
     }
