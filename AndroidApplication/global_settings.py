@@ -4,11 +4,13 @@ import Backend.local_backend as lBackEnd
 def Init():
     global DebugMod, FontSizes, Coffee_Colors, CurrentUser, Second_Theme_Colors, Global_Theme_Colors, MenuProducts, Products_in_Cart, OrderNumber
     global funcs_upd_cart, funcs_upd_order_number
+    global host
 
     funcs_upd_cart = []
     funcs_upd_order_number = []
 
     DebugMod = True
+    host = 'localhost'
 
     CurrentUser = "+78005553535"
 
@@ -115,3 +117,13 @@ def update_order_number():
 def set_order_number(new_number):
     global OrderNumber
     OrderNumber = new_number
+
+
+def SetDebugMode(new_mode):
+    global DebugMod, host
+
+    DebugMod = new_mode
+    if DebugMod:
+        host = 'localhost'
+    else:
+        host = '10.0.2.2'

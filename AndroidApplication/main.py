@@ -1,3 +1,16 @@
+#########################################################
+#######   Включение DebugMode для отладки API    ########
+#########################################################
+
+import global_settings
+
+debugMode = True #     <--------------------------------- изменять здесь
+
+#########################################################
+#######                                          ########
+#########################################################
+
+
 import os
 
 import kivy.uix.screenmanager
@@ -30,7 +43,6 @@ import cart_screen
 import pay_screen
 import order_number_screen
 
-import global_settings
 import Backend.backend as backend
 import Backend.local_backend as lBackEnd
 
@@ -57,6 +69,9 @@ class CoffeeApp(App):
 
         if os.path.exists('cookies'):
             self.sm.current = 'menu_screen'
+            cookies_file = open('cookies', 'r')
+            str_number = cookies_file.readline()
+            global_settings.SetCurrentUser(str_number)
 
         return self.sm
 
@@ -83,6 +98,7 @@ if __name__ == '__main__':
     normal_font_size = test_label_size.font_size
     new_font_sizes = [normal_font_size * font_scale for font_scale in font_scales]
     global_settings.Init()
+    global_settings.SetDebugMode(debugMode)
     global_settings.SetFontSizes(new_font_sizes)
     global_settings.Products_in_Cart = lBackEnd.get_cart_items_from_json()
 

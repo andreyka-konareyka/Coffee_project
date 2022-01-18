@@ -12,14 +12,14 @@
       "title": "Капучино",
       "price": 100,
       "description": "",
-      "image": "latte.png"
+      "image": "cappuccino.png"
     },
     {
       "id": 3,
       "title": "Американо",
       "price": 80,
       "description": "",
-      "image": "latte.png"
+      "image": "americano.png"
     }
   ]
 }
