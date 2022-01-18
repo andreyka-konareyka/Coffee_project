@@ -4,6 +4,7 @@ from telebot import types
 import mark_ups as nv
 from pyqiwip2p import QiwiP2P
 import random
+import requests
 
 bot = telebot.TeleBot("2076232517:AAEWXXnJJk7f6UOmZDKU1qztvVqA3poB0us")
 
@@ -13,44 +14,44 @@ p2p = QiwiP2P(auth_key=
               "eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6IjBhcDk4My0wMCIsInVzZXJfaWQiOiI3OTY4OTI4NTE1NSIsInNlY3JldCI6IjUzNzllNTAwODkyNzE5NWE3NmZjMDc5ZGIwMTU0YTQ2YTYzY2FiYzE5MzIyODkxMjVkMGY1ZjkwNDlkZWNiZGUifX0=")
 
 state = 0
-#Синхронизация удаления кол-ва элементов из БД(временное) конечное удаление после оплаты
+
 def update_bread_list():
-    '''lst = []
-    with connection:
-        cursor.execute("SELECT * FROM `sklad` WHERE `category` = ?", ("bread",))
-        records = cursor.fetchall()
-        for row in records:
-            if row[4] > 0:
-                lst.append(row[2])
-    return lst'''
+    result = []
+    products = requests.get('http://localhost:8080/product', params= {'type':'dessert'})
+    raw_json_list = products.json()
+    for product in raw_json_list:
+        if product['amount'] > 0 :
+            result.append(product['name'])
+         
+    return result
+    
 
 def update_water_list():
-    lst = []
-    with connection:
-        cursor.execute("SELECT * FROM `sklad` WHERE `category` = ?", ("water",))
-        records = cursor.fetchall()
-        for row in records:
-            if row[4] > 0:
-                lst.append(row[2])
-    return lst
+    result = []
+    hotDrinks = requests.get('http://localhost:8080/product', params= {'type':'hotDrink'})
+    coldDrinks = requests.get('http://localhost:8080/product', params= {'type':'coldDrink'})
+    hot_json_list = hotDrinks.json()
+    cold_json_list = coldDrinks.json()
+    for product in hot_json_list:
+        if product['amount'] > 0 :
+            result.append(product['name'])
+    for product in cold_json_list:
+        if product['amount'] > 0 :
+            result.append(product['name'])     
+    return result
+    
 
 def update_price_list():
-    price_list = {}
-    with connection:
-        cursor.execute("SELECT * FROM `sklad` WHERE `category` = ?", ("bread",))
-        records = cursor.fetchall()
-        temp_ = {}
-        for row in records:
-            temp_[row[2]] = row[5]
-        price_list["category_bread"] = temp_
-
-        cursor.execute("SELECT * FROM `sklad` WHERE `category` = ?", ("water",))
-        records = cursor.fetchall()
-        temp_ = {}
-        for row in records:
-            temp_[row[2]] = row[5]
-        price_list["category_water"] = temp_
-    return price_list
+    products = requests.get('http://localhost:8080/product')
+    prod_json_list = products.json()
+    price_list={"category_bread":{}, "category_water":{}}
+    for product in prod_json_list:
+        if product['type'] == 'dessert':
+            price_list["category_bread"][product['name']] = product['price']
+        else:
+            price_list["category_water"][product['name']] = product['price']
+            
+    return price_list        
 
 napitki = update_water_list()
 zakuski = update_bread_list()
@@ -82,6 +83,8 @@ def send_text(message):
    global state, zakaz
    user = bot.get_me()
    zakaz["user_id"] = user.id
+
+   print(state)
    if (state == 0):
 
        if message.text.lower() == 'сделать заказ':
@@ -239,18 +242,17 @@ def send_text(message):
            return
 
    elif (state == 8):
-       if zakaz["price"] < 25:
+       if zakaz["price"] <= 0:
            state = 0
            bot.send_message(message.chat.id, "Отменяю заказ, так как вы заказали меньше допустимой цены. Чего желаете?", reply_markup=nv.keyboard1)
            zakaz_set_default()
            bot.send_sticker(message.chat.id, 'CAACAgUAAxkBAAEDToVhlPtOPbCHx_0q4iblLkO1qEPJRAACIAQAArXP8FcX_VjrZf6uNSIE')
            return
        if message.text.lower() == "оплата сейчас":
-           print(zakaz["user_id"])
            comment = str(zakaz["user_id"]) + "_" + str(random.randint(1000, 9999))
            zakaz["number_req"] = comment
            bill = p2p.bill(amount= price, lifetime = 15, comment = comment)
-           bot.send_message(message.chat.id, F"Ваш счет на оплату готов:\n{bill.pay_url}\nКомментарий к заказу: {comment}" )
+           bot.send_message(message.chat.id, F"Ваш счет на оплату готов:\n{bill.pay_url}\nКомментарий к заказу: {comment}\nКак оплатите, напишите мне что угодно. ОБЯЗАТЕЛЬНО!" )
            user = bot.get_me()
            add_check(user.id, bill.bill_id)
            waiting_for_paid(bill.bill_id, user.id)
@@ -266,20 +268,22 @@ def send_text(message):
        bot.send_message(message.chat.id, "Хорошо, воспользуйтесь кодом комментария для получения заказа. Что-то еще?", reply_markup=nv.keyboard1)
        bot.send_sticker(message.chat.id, 'CAACAgUAAxkBAAEDjThhxLf5rF7sahZc7BUqUt4jMAOd-QACigMAAlZy8Fe-tgkYYJYTJCME')
        state = 0
+       
 
 def waiting_for_paid(bill_id, user_id):
     global state, zakaz
     info = get_check(bill_id)
     if info != False:
-        if str(p2p.check(bill_id = bill_id).status) == "PAID":
-            state = 9
-            zakaz["was_priced"] = True
-            delete_check(bill_id)
-            pool_request(bill_id, user_id)
+        while str(p2p.check(bill_id = bill_id).status) != "PAID":
+            pass
+        state = 9
+        zakaz["was_priced"] = True
+        delete_check(bill_id)
+        pool_request(bill_id, user_id)
+       
     else:
-        bot.send_message(message.chat.id, "Счет не найден")
+        print("blin")
         state = 8
-
 
 def pool_request(bill_id, user_id):
     global zakaz
@@ -304,9 +308,8 @@ def pool_request(bill_id, user_id):
     else:
         book = zakaz["book_a_table"][1]
 
-
-    with connection:
-        cursor.execute("INSERT INTO `request` (`user_id`, `num`, `req`, `book`) VALUES (?, ?, ?, ?)", (user_id, bill_id, res, book,))
+    requests.post(url = 'http://localhost:8080/order' , headers = {'Content-Type': 'application/json'}, json ={'userId':user_id,'billId':bill_id, 'products':res, 'booking':book})
+    
        
     
 
@@ -388,29 +391,33 @@ def update_price():
     zakaz["price"] = price
 
 def user_exists(user_id):
-    with connection:
-        result = cursor.execute("SELECT * FROM `clients` WHERE `user_id` = ?", (user_id,)).fetchall()
-        return bool(len(result))
+    user = requests.get('http://localhost:8080/product', params={'teleId': user_id})
+    if user.status_code != 200:
+        return False
+    return True
+    
 
 def add_user(user_id):
-    with connection:
-        return cursor.execute("INSERT INTO `clients` (`user_id`) VALUES (?)", (user_id,))
+    requests.post(url = 'http://localhost:8080/user' , headers = {'Content-Type': 'application/json'}, json = {'teleId':user_id})
+    
 
 def add_check(user_id, bill_id):
-    with connection:
-        cursor.execute("INSERT INTO `check` (`user_id`, `bill_id`) VALUES (?, ?)", (user_id, bill_id,))
+    requests.post(url = 'http://localhost:8080/order' , headers = {'Content-Type': 'application/json'}, json = {'userId':user_id, 'billId':bill_id})
+    
 
 def get_check(bill_id):
-    with connection:
-        result = cursor.execute("SELECT * FROM `check` WHERE `bill_id` = ?", (bill_id,)).fetchmany(1)
-        if not bool(len(result)):
-            return False
-        else:
-            return result[0]
+    data = requests.get('http://localhost:8080/order', params={'billId': bill_id})
+    if data.status_code != 200:
+        return False
+    return True
+    
 
 def delete_check(bill_id):
-    with connection:
-        return cursor.execute("DELETE FROM `check` WHERE `bill_id` = ?", (bill_id,))
+    data = requests.get('http://localhost:8080/order', params={'billId': bill_id})
+    id = data.json()['id']
+    urli = 'http://localhost:8080/order/'+str(id)
+    requests.delete(url = urli)
+    
 
 bot.infinity_polling()
 
