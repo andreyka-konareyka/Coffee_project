@@ -1,5 +1,4 @@
 import telebot
-import sqlite3
 from telebot import types
 import mark_ups as nv
 from pyqiwip2p import QiwiP2P
