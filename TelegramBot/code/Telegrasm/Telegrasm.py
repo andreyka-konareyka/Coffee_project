@@ -10,19 +10,19 @@ bot = telebot.TeleBot("2076232517:AAEWXXnJJk7f6UOmZDKU1qztvVqA3poB0us")
 connection = sqlite3.connect('C:/Users/andry/source/repos/Coffee_project/TelegramBot/code/testy.db', check_same_thread=False)
 cursor = connection.cursor() 
 p2p = QiwiP2P(auth_key=
-              "eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6IjBhcDk4My0wMCIsInVzZXJfaWQiOiI3OTY4OTI4NTE1NSIsInNlY3JldCI6ImYzYTc3YjdjN2M1N2FjNzExZGE3NTFkYWMzZWQyMTlmMmViOTZlMGU3NzRkMGJmOThiZjhkMjE1OGIwZTRhM2UifX0=")
+              "eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6IjBhcDk4My0wMCIsInVzZXJfaWQiOiI3OTY4OTI4NTE1NSIsInNlY3JldCI6IjUzNzllNTAwODkyNzE5NWE3NmZjMDc5ZGIwMTU0YTQ2YTYzY2FiYzE5MzIyODkxMjVkMGY1ZjkwNDlkZWNiZGUifX0=")
 
 state = 0
 #Синхронизация удаления кол-ва элементов из БД(временное) конечное удаление после оплаты
 def update_bread_list():
-    lst = []
+    '''lst = []
     with connection:
         cursor.execute("SELECT * FROM `sklad` WHERE `category` = ?", ("bread",))
         records = cursor.fetchall()
         for row in records:
             if row[4] > 0:
                 lst.append(row[2])
-    return lst
+    return lst'''
 
 def update_water_list():
     lst = []
