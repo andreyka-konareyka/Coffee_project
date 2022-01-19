@@ -68,11 +68,6 @@ def Init():
     OrderNumber = ''
 
 
-def SetDebugMode(new_mode):
-    global DebugMod
-    DebugMod = new_mode
-
-
 def SetFontSizes(array_sizes):
     global FontSizes
     FontSizes = array_sizes

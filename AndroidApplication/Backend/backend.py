@@ -1,8 +1,11 @@
 import Backend.local_backend as l_backend
 import global_settings
-import requests
 import hashlib
 import random
+try:
+    import requests
+except:
+    pass
 
 
 def LoginUser(login, password):
@@ -28,14 +31,10 @@ def LoginUser(login, password):
         elif data.text == 'true':
             global_settings.SetCurrentUser(login)
             return True
-
+        else:
+            return False
     except:
-        # попытка локальной авторизации
-        result = l_backend.login_user_with_json(login, password)
-        if result is True:
-            global_settings.SetCurrentUser(login)
-            return True
-        return False
+        return l_backend.login_user_with_json(login, password)
 
 
 def RegistrationUser(login, password):
