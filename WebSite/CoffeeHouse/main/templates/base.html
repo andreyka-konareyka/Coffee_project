@@ -19,8 +19,11 @@
             margin-right: 250px;
             margin-bottom: 150px
             }
-            .for-btn{
-            margin: 0
+            .for-order{
+            margin-left: 250px;
+            margin-right: 250px;
+            margin-bottom: 10px
+            margin-top: 10px
             }
         </style>
     </head>
@@ -33,7 +36,6 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'base' %}">Главная</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">О нас</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Меню</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -65,6 +67,16 @@
             </div>
         </header>
         <!-- Section-->
+        <div class="for-order">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>{{ message }}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        </div>
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
