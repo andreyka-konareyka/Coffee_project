@@ -191,7 +191,7 @@ class Order(models.Model):
         (STATUS_COMPLETED,'Заказ выполнен'),
     )
 
-    customer = models.ForeignKey(Customer, verbose_name='Покупатель', related_name='related_orders', on_delete=models.CASCADE)
+    #customer = models.ForeignKey(Customer, verbose_name='Покупатель', related_name='related_orders', on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255, verbose_name='Имя')
     last_name = models.CharField(max_length=255, verbose_name='Фамилия')
     phone = models.CharField(max_length=20, verbose_name='Телефон')
