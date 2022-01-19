@@ -1,0 +1,4 @@
+telebot
+pyqiwip2p
+random
+requests
