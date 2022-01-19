@@ -137,7 +137,7 @@ class Desserts(Product):
 
 
 class CartProduct(models.Model):
-    user = models.ForeignKey('Customer', verbose_name='Покупатель', on_delete=models.CASCADE)
+    user = models.ForeignKey('Customer', verbose_name='Покупатель', null=True, on_delete=models.CASCADE)
     cart = models.ForeignKey('Cart', verbose_name='корзина', on_delete=models.CASCADE, related_name='related_products')
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE) #тут будет модель продукта
     object_id = models.PositiveIntegerField() #тут будет кол-во
