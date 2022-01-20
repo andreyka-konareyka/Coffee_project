@@ -1,0 +1,25 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Латте",
+      "price": 120,
+      "description": "",
+      "image": "latte.png"
+    },
+    {
+      "id": 2,
+      "title": "Капучино",
+      "price": 100,
+      "description": "",
+      "image": "cappuccino.png"
+    },
+    {
+      "id": 3,
+      "title": "Американо",
+      "price": 80,
+      "description": "",
+      "image": "americano.png"
+    }
+  ]
+}
