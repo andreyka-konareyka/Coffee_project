@@ -17,7 +17,7 @@ def update_bread_list():
     products = requests.get('http://localhost:8080/product', params= {'type':'dessert'})
     raw_json_list = products.json()
     for product in raw_json_list:
-        if product['amount'] > 0 :
+        if (product['amount'] is not None) and (product['amount'] > 0):
             result.append(product['name'])
          
     return result
@@ -30,10 +30,10 @@ def update_water_list():
     hot_json_list = hotDrinks.json()
     cold_json_list = coldDrinks.json()
     for product in hot_json_list:
-        if product['amount'] > 0 :
+        if (product['amount'] is not None) and (product['amount'] > 0):
             result.append(product['name'])
     for product in cold_json_list:
-        if product['amount'] > 0 :
+        if (product['amount'] is not None) and (product['amount'] > 0):
             result.append(product['name'])     
     return result
     
@@ -239,7 +239,7 @@ def send_text(message):
            return
 
    elif (state == 8):
-       if zakaz["price"] <= 0:
+       if zakaz["price"] <= 50:
            state = 0
            bot.send_message(message.chat.id, "Отменяю заказ, так как вы заказали меньше допустимой цены. Чего желаете?", reply_markup=nv.keyboard1)
            zakaz_set_default()
